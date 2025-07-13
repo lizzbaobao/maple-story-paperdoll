@@ -4,6 +4,51 @@ import { readPsd } from "ag-psd";
 
 //楓之谷的紙娃娃一格是250*250
 
+const walk = {
+  move: [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 0, col: 3 },
+  ],
+  intervalMs: 200,
+  pause: false,
+  pauseMs: 0,
+};
+
+const stand1 = {
+  move: [
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 1, col: 2 },
+  ],
+  intervalMs: 200,
+  pause: false,
+  pauseMs: 0,
+};
+
+const stand2 = {
+  move: [
+    { row: 2, col: 0 },
+    { row: 2, col: 1 },
+    { row: 2, col: 2 },
+  ],
+  intervalMs: 200,
+  pause: false,
+  pauseMs: 0,
+};
+
+const Alert = {
+  move: [
+    { row: 3, col: 0 },
+    { row: 3, col: 1 },
+    { row: 3, col: 2 },
+  ],
+  intervalMs: 200,
+  pause: false,
+  pauseMs: 0,
+};
+
 const corsairFire = {
   move: [
     { row: 0, col: 5 },
@@ -44,6 +89,10 @@ const spriteSets = [
   { key: "fire", label: "射擊", value: corsairFire },
   { key: "octopus", label: "章魚", value: corsairOctopus },
   { key: "throw", label: "丟炸彈，鳥蛋", value: corsairThrow },
+  { key: "walk", label: "走路", value: walk },
+  { key: "stand1", label: "站立", value: stand1 },
+  { key: "stand2", label: "站立", value: stand2 },
+  { key: "alert", label: "警戒", value: Alert },
 ];
 
 function ImageResolution() {
@@ -67,7 +116,7 @@ function ImageResolution() {
       setInfo(`寬度: ${width}px，高度: ${height}px`);
       setPsdData(psd);
 
-      // 調試信息
+      // 調試資訊
       console.log("PSD 數據結構:", psd);
       console.log("PSD 屬性:", Object.keys(psd));
       if (psd.children) {
