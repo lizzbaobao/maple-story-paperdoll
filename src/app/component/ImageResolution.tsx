@@ -2,6 +2,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { readPsd } from "ag-psd";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 //楓之谷的紙娃娃一格是250*250
 
 const walk = {
@@ -40,9 +50,9 @@ const stand2 = {
 
 const Alert = {
   move: [
-    { row: 3, col: 0 },
-    { row: 3, col: 1 },
-    { row: 3, col: 2 },
+    { row: 4, col: 0 },
+    { row: 4, col: 1 },
+    { row: 4, col: 2 },
   ],
   intervalMs: 200,
   pause: false,
@@ -299,12 +309,24 @@ function ImageResolution() {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">圖片分辨率</h1>
-      <input
-        type="file"
-        accept=".psd"
-        onChange={handleFileChange}
-        className="mb-4"
-      />
+      <div className="relative inline-block mb-4">
+        {/* 使用 Shadcn/ui 的 Button 元件 */}
+        <Button
+          type="button" // 確保是 type="button" 以避免觸發表單提交
+          onClick={() => document.getElementById("psdFileInput")?.click()}
+        >
+          選擇 PSD 檔案
+        </Button>
+
+        {/* 隱藏的原生檔案輸入框 */}
+        <input
+          type="file"
+          accept=".psd"
+          onChange={handleFileChange}
+          className="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"
+          id="psdFileInput" // 給一個唯一的 ID
+        />
+      </div>
 
       <div className="border rounded-lg p-4 min-h-[40px] mb-4">
         {info ? <p>{info}</p> : <p>請上傳 PSD 檔案</p>}
@@ -326,23 +348,30 @@ function ImageResolution() {
         </div>
       )}
       <div>
-        <select
+        <Select
           value={spriteSets.find((s) => s.value === spriteSet)?.key}
-          onChange={(e) => {
-            const selected = spriteSets.find((s) => s.key === e.target.value);
+          onValueChange={(value) => {
+            const selected = spriteSets.find((s) => s.key === value);
             if (selected) {
               setSpriteSet(selected.value);
               setCurrentIndex(0);
             }
           }}
-          className="mb-4 border rounded p-2"
         >
-          {spriteSets.map((s) => (
-            <option key={s.key} value={s.key}>
-              {s.label}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-[180px] mb-4">
+            <SelectValue placeholder="選擇動作" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>動作類型</SelectLabel>
+              {spriteSets.map((s) => (
+                <SelectItem key={s.key} value={s.key}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <canvas
           ref={firstGridRef}
           style={{
